@@ -31,11 +31,11 @@
   <body>
     <h1>Number guessing game</h1>
 
-    <p>We have selected a random number between 1 and 100. See if you can guess it in 10 turns or fewer. We'll tell you if your guess was too high or too low.</p>
+    <p>We have selected a random number between 1 and 10. See if you can guess it in 10 turns or fewer. We'll tell you if your guess was too high or too low.</p>
 
     <div class="form">
       <label for="guessField">Enter a guess: </label>
-      <input type="number" min="1" max="100" required id="guessField" class="guessField">
+      <input type="number" min="1" max="10" required id="guessField" class="guessField">
       <input type="submit" value="Submit guess" class="guessSubmit">
     </div>
 
@@ -43,43 +43,54 @@
       <p class="guesses"></p>
       <p class="lastResult"></p>
       <p class="lowOrHi"></p>
+      <p class="rightNum"></p>
+    
     </div>
+    <img src="./微信图片_20221202162315.jpg" id="sucImg" style="width:50%;display:none;" >
+    <img src="./kl.jfif" id="klImg" style="display:none;" >
+
 
     <script>
-      let randomNumber = Math.floor(Math.random() * 100) + 1;
+      let randomNumber = Math.floor(Math.random() * 10) + 1;
       const guesses = document.querySelector('.guesses');
       const lastResult = document.querySelector('.lastResult');
       const lowOrHi = document.querySelector('.lowOrHi');
       const guessSubmit = document.querySelector('.guessSubmit');
       const guessField = document.querySelector('.guessField');
+      const rightNum = document.querySelector('.rightNum');
       let guessCount = 1;
       let resetButton;
-
       function checkGuess() {
         const userGuess = Number(guessField.value);
         if (guessCount === 1) {
-          guesses.textContent = 'Previous guesses: ';
+          guesses.textContent = '上一次猜的数字: ';
         }
 
         guesses.textContent += userGuess + ' ';
 
         if (userGuess === randomNumber) {
-          lastResult.textContent = 'Congratulations! You got it right!';
+          lastResult.textContent = '恭喜! 你猜对了!';
           lastResult.style.backgroundColor = 'green';
           lowOrHi.textContent = '';
+          document.getElementById('sucImg').style.display='block';
+          document.getElementById('klImg').style.display='none';
+
+
           setGameOver();
-        } else if (guessCount === 10) {
-          lastResult.textContent = '!!!GAME OVER!!!';
+        } else if (guessCount === 5) {
+          lastResult.textContent = '!!!游戏结束!!!';
           lowOrHi.textContent = '';
           setGameOver();
         } else {
-          lastResult.textContent = 'Wrong!';
+          lastResult.textContent = '错误!';
           lastResult.style.backgroundColor = 'red';
           if(userGuess < randomNumber) {
-            lowOrHi.textContent = 'Last guess was too low!' ;
+            lowOrHi.textContent = '上次猜的太小了!' ;
           } else if(userGuess > randomNumber) {
-            lowOrHi.textContent = 'Last guess was too high!';
+            lowOrHi.textContent = '上次猜的太大了!';
           }
+          document.getElementById('klImg').style.display='block';
+
         }
 
         guessCount++;
@@ -93,12 +104,15 @@
         guessField.disabled = true;
         guessSubmit.disabled = true;
         resetButton = document.createElement('button');
-        resetButton.textContent = 'Start new game';
+        resetButton.textContent = '开始猜字游戏';
         document.body.appendChild(resetButton);
         resetButton.addEventListener('click', resetGame);
+        rightNum.textContent = '正确的数字是：'+randomNumber;
       }
 
       function resetGame() {
+        document.getElementById('sucImg').style.display='none';
+          document.getElementById('klImg').style.display='none';
         guessCount = 1;
         const resetParas = document.querySelectorAll('.resultParas p');
         for (const resetPara of resetParas) {
@@ -111,7 +125,7 @@
         guessField.value = '';
         guessField.focus();
         lastResult.style.backgroundColor = 'white';
-        randomNumber = Math.floor(Math.random() * 100) + 1;
+        randomNumber = Math.floor(Math.random() * 10) + 1;
       }
     </script>
   </body>
